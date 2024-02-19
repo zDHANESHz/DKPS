@@ -1,18 +1,17 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class CharacterControllerS : MonoBehaviour
 {
-    //need to clamp the camera rotation properly 
     private static CharacterControllerS instance;
     private CharacterController characterController;
     private IInputManager inputManager;
 
-     public float walkSpeed = 3f;
+    public float walkSpeed = 3f;
     public float sprintSpeed = 8f;
     public float sprintAcceleration = 2f;
-    public float StoppingSpeed = 6f; 
-
-    public float currentSpeed;// in public for testing purose
+    public float stoppingSpeed = 6f;
+    public float currentSpeed;
     private bool isSprinting;
 
     public static CharacterControllerS Instance
@@ -49,6 +48,7 @@ public class CharacterControllerS : MonoBehaviour
 
         // inputManager = FindObjectOfType<NewInputManager>();
     }
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -65,7 +65,7 @@ public class CharacterControllerS : MonoBehaviour
     private void HandleMovement()
     {
         Vector2 movementInput = inputManager.GetPlayerMovement();
-        Vector3 moveDirection = new Vector3(movementInput.x, 0f, movementInput.y);
+        Vector3 moveDirection = transform.forward * movementInput.y + transform.right * movementInput.x;
         float speed = isSprinting ? currentSpeed : walkSpeed;
         characterController.Move(moveDirection * speed * Time.deltaTime);
         Debug.Log(speed);
@@ -75,9 +75,9 @@ public class CharacterControllerS : MonoBehaviour
     {
         Vector2 rotateInput = inputManager.GetCameraRotate();
         transform.Rotate(Vector3.up, rotateInput.x);
-
         transform.Rotate(Vector3.right, rotateInput.y);
     }
+
     private void HandleActions()
     {
         if (inputManager.GetFlashButtonDown())
@@ -98,16 +98,19 @@ public class CharacterControllerS : MonoBehaviour
 
     private void TurnFlashlight()
     {
-        // varan varan puchandi light adi da puchandi
+        // Implement flashlight logic
     }
+
     private void StartSprint()
     {
         isSprinting = true;
         currentSpeed = Mathf.MoveTowards(currentSpeed, sprintSpeed, sprintAcceleration * Time.deltaTime);
     }
+
     private void StopSprint()
     {
         isSprinting = false;
-        currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, StoppingSpeed * Time.deltaTime);
+        currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, stoppingSpeed * Time.deltaTime);
     }
+
 }

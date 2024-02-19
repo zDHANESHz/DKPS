@@ -9,5 +9,6 @@ public interface IInputManager
     Vector2 GetPlayerMovement();
     bool GetShiftDown();
     bool GetFlashButtonDown();
+    
 }
 
