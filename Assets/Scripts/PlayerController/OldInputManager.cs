@@ -4,7 +4,7 @@ public class OldInputManager : MonoBehaviour, IInputManager
 {
     public static OldInputManager Instance { get; private set; }
     Transform cameraTransform;
-    float rotationSpeed = 10f;
+    float rotationSpeed = 25f;
 
     private void Awake()
     {
